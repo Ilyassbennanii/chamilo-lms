@@ -33,11 +33,17 @@ export default {
    * @param {String|Number} termId
    * @param {Object} data
    */
+  // assets/services/glossaryService.js
   updateGlossaryTerm: async (termId, data) => {
-    const response = await axios.put(ENTRYPOINT + `glossaries/${termId}`, data)
-
-    return response.data
+    try {
+      const response = await axios.put(ENTRYPOINT + `glossaries/${termId}`, data)
+      return response.data
+    } catch (error) {
+      // Ici tu peux logger ou transformer l’erreurv
+      throw error // ou return { error }
+    }
   },
+
 
   /**
    * @param {FormData} formData

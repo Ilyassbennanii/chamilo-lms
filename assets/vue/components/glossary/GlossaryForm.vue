@@ -103,11 +103,11 @@ const fetchTerm = async () => {
 const submitGlossaryForm = async () => {
   v$.value.$touch()
 
-  if (v$.value.$invalid) {
+  if (v$.value.$invalid) { // si l'utilisateur touche pas  le formulaire
     return
   }
 
-  const postData = {
+  const postData = { // donnée recu
     title: formData.title,
     description: formData.description,
     parentResourceNodeId: parentResourceNodeId.value,
@@ -134,4 +134,5 @@ const submitGlossaryForm = async () => {
     notification.showErrorNotification(t("Could not create glossary term"))
   }
 }
+
 </script>
