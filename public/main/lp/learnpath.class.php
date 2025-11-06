@@ -4907,7 +4907,7 @@ class learnpath
         }
 
         if ((false === strpos($request, 'build') &&
-            false === strpos($request, 'add_item')) ||
+                false === strpos($request, 'add_item')) ||
             in_array($action, ['add_audio'], true)
         ) {
             $actionsLeft .= Display::url(
@@ -4943,16 +4943,16 @@ class learnpath
                 [
                     'title' => get_lang('Set previous step as prerequisite for each step'),
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
-                        'action' => 'set_previous_step_as_prerequisite',
-                        'lp_id' => $lpId,
-                    ]),
+                            'action' => 'set_previous_step_as_prerequisite',
+                            'lp_id' => $lpId,
+                        ]),
                 ],
                 [
                     'title' => get_lang('Clear all prerequisites'),
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
-                        'action' => 'clear_prerequisites',
-                        'lp_id' => $lpId,
-                    ]),
+                            'action' => 'clear_prerequisites',
+                            'lp_id' => $lpId,
+                        ]),
                 ],
             ];
             $actionsRight = Display::groupButtonWithDropDown(
@@ -5710,7 +5710,28 @@ class learnpath
 
         $form->addButtonSave(get_lang('Save'), 'submit_button');
 
-        return $form->returnForm();
+        $script = '<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var form = document.getElementById("form") || document.forms["form"];
+    if (!form) return;
+    form.addEventListener("submit", function (e) {
+        var btn = form.querySelector("button[name=submit_button], input[name=submit_button]");
+        if (!btn) return;
+        // async disable to avoid interfering with possible sync handlers triggered on submit
+        setTimeout(function () {
+            try {
+                btn.disabled = true;
+                if (btn.classList) btn.classList.add("disabled");
+            } catch (err) {
+                // silent
+            }
+        }, 0);
+    }, { once: true }); // once: true to disable only on the first submit
+
+});
+</script>';
+
+        return $form->returnForm() . $script;
     }
 
     /**
@@ -6242,8 +6263,8 @@ class learnpath
                         max="'.$item['maxScore'].'"
                         value="'.$selectedMaxScoreValue.'"
                     />';
-                        $return .= '</td>';
-                    }
+                    $return .= '</td>';
+                }
 
                 if (TOOL_HOTPOTATOES == $type) {
                     $return .= '<td>';
@@ -6257,9 +6278,9 @@ class learnpath
                         max="'.$item['maxScore'].'"
                         value="'.$selectedMinScoreValue.'"
                     />';
-                        $return .= '</td>';
-                        $return .= '<td>';
-                        $return .= '<input
+                    $return .= '</td>';
+                    $return .= '<td>';
+                    $return .= '<input
                         size="4"
                         maxlength="3"
                         name="max_'.$itemId.'"
@@ -6597,7 +6618,7 @@ class learnpath
             $return .= Display::url(
                 Security::remove_XSS(cut($title, 80)).$link.$sessionStar,
                 api_get_self().'?'.
-                    api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$exerciseId.'&lp_id='.$this->lp_id,
+                api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$exerciseId.'&lp_id='.$this->lp_id,
                 [
                     'class' => false === $visibility ? 'moved text-muted ' : 'moved link_with_id',
                     'data_type' => 'quiz',
@@ -6667,7 +6688,7 @@ class learnpath
                 <a
                 href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'"
                 title="'.get_lang('Add a link').'">'.
-                get_lang('Add a link').'
+            get_lang('Add a link').'
                 </a>
             </li>';
         $linkIcon = Display::getMdiIcon('file-link', 'ch-tool-icon', null, 16, get_lang('Link'));
@@ -6720,7 +6741,7 @@ class learnpath
                 </li>
             '.
                 $linkNodes.
-            '';
+                '';
             //<div style="display:none" id="'.TOOL_LINK.'_'.$categoryId.'_content">'.
         }
         $linksHtmlCode .= '</ul>';
@@ -7888,9 +7909,9 @@ class learnpath
         ];
 
         $url = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
-            'type' => 'document',
-            'lp_id' => $this->lp_id,
-        ]);
+                'type' => 'document',
+                'lp_id' => $this->lp_id,
+            ]);
 
         $form = new FormValidator('final_item', 'POST', $url);
         $form->addText('title', get_lang('Title'));
